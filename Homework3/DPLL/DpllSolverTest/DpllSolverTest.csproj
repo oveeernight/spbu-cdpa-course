@@ -6,6 +6,8 @@
         <Nullable>enable</Nullable>
 
         <IsPackable>false</IsPackable>
+
+        <RootNamespace>DPLLTest</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>
@@ -17,7 +19,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\DPLL\DPLL.csproj" />
+      <ProjectReference Include="..\DpllSolver\DpllSolver.csproj" />
     </ItemGroup>
 
     <ItemGroup>

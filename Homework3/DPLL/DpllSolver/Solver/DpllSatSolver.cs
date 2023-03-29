@@ -4,7 +4,7 @@ using Dpll.SatModels;
 
 namespace Dpll.Solver;
 
-public class DpllSatSolver : SatSolver
+public class DpllSatSolver : ISatSolver
 {
     public (SatResult result, Clause? satSuit) Solve(string path)
     {

@@ -6,8 +6,9 @@ namespace DpllTest;
 
 public class Tests
 {
-    private SatSolver solver = new DpllSatSolver();
+    private ISatSolver solver = new DpllSatSolver();
 
+    private Action OnKek;
     [SetUp]
     public void Setup()
     {
