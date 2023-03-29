@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using Dpll.Extensions;
+﻿using Dpll.Extensions;
 using Dpll.SatModels;
 
 namespace Dpll.Solver;

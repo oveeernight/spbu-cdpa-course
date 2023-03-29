@@ -1,8 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DPLL", "DPLL\DPLL.csproj", "{E64A686E-C4D9-4F0A-879C-99A4A1A152B3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DpllSolver", "DpllSolver\DpllSolver.csproj", "{E64A686E-C4D9-4F0A-879C-99A4A1A152B3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DPLLTest", "DPLLTest\DPLLTest.csproj", "{800C33B8-2533-411B-AFDE-3729F6297FB2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DpllSolverTest", "DpllSolverTest\DpllSolverTest.csproj", "{800C33B8-2533-411B-AFDE-3729F6297FB2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
