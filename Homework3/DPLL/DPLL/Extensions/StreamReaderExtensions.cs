@@ -2,14 +2,13 @@ using Dpll.SatModels;
 
 namespace Dpll.Extensions;
 
-public static class FileStreamExtensions
+public static class StreamReaderExtensions
 {
     public static SatFormula ToSatFormula(this StreamReader streamReader)
     {
         var configuration = streamReader.ReadLine()?.Split().Skip(2).Select(int.Parse).ToArray() ?? Array.Empty<int>();
-        var (literalsCount, clausesCount) = (configuration[0], configuration[1]);
-        var containsEmptyClause = false;
-        var (pureLiterals, unitLiterals) = (new List<int>(), new List<int>());
+        var literalsCount = configuration[0];
+        var unitLiterals = new List<int>();
         var clauses = new List<Clause>();
         while (!streamReader.EndOfStream)
         {
@@ -28,7 +27,7 @@ public static class FileStreamExtensions
             clauses.Add(line.ToClause());
         }
 
-        pureLiterals = clauses.GetPureLiterals();
+        var pureLiterals = clauses.GetPureLiterals();
 
         return new SatFormula(
             clauses: clauses,

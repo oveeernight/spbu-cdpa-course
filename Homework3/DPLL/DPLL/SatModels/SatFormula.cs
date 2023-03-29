@@ -11,7 +11,7 @@ public class SatFormula
     public bool ContainsPureLiteral { get; }
     public List<int> UnitLiterals { get; }
     public List<int> PureLiterals { get; }
-    public int LiteralsCount { get; set; }
+    public int LiteralsCount { get; }
     public SatFormula(
         List<Clause> clauses,
         List<int> unitLiterals,
