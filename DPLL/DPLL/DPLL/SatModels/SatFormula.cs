@@ -5,18 +5,19 @@ namespace Dpll.SatModels;
 
 public class SatFormula
 {
-    public List<Clause> Clauses { get; } 
+    public List<Clause> Clauses { get; }
     public bool ContainsUnitLiteral { get; }
     public bool ContainsEmptyClause { get; }
     public bool ContainsPureLiteral { get; }
     public List<int> UnitLiterals { get; }
     public List<int> PureLiterals { get; }
-
+    public int LiteralsCount { get; set; }
     public SatFormula(
         List<Clause> clauses,
         List<int> unitLiterals,
         List<int> pureLiterals,
-        bool containsEmptyClause)
+        bool containsEmptyClause,
+        int literalsCount)
     {
         Clauses = clauses;
         UnitLiterals = unitLiterals;
@@ -24,6 +25,7 @@ public class SatFormula
         ContainsUnitLiteral = unitLiterals.Count > 0;
         ContainsEmptyClause = containsEmptyClause;
         ContainsPureLiteral = pureLiterals.Count > 0;
+        LiteralsCount = literalsCount;
     }
 
     [Pure]
@@ -32,7 +34,13 @@ public class SatFormula
         var literalAbs = Math.Abs(literal);
         var multiplier = assignedValue ? 1 : -1;
         var simplifiedClauses = Clauses
-            .Where(clause => !clause.Literals.Contains(multiplier * literal))
+            .Where(clause => !clause.Literals.Contains(multiplier * literalAbs))
+            .Select(clause =>
+            {
+                var listCopy = new int[clause.Literals.Count];
+                clause.Literals.CopyTo(listCopy);
+                return new Clause(listCopy.ToList());
+            })
             .ToList();
 
         var containsEmptyClause = false;
@@ -56,6 +64,7 @@ public class SatFormula
             clauses: simplifiedClauses,
             unitLiterals: unitLiterals,
             pureLiterals: pureLiterals,
-            containsEmptyClause: containsEmptyClause);
+            containsEmptyClause: containsEmptyClause,
+            literalsCount: LiteralsCount - 1);
     }
 }

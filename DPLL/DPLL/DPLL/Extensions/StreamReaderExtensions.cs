@@ -6,7 +6,8 @@ public static class FileStreamExtensions
 {
     public static SatFormula ToSatFormula(this StreamReader streamReader)
     {
-        var configuration = streamReader.ReadLine() ?? string.Empty;
+        var configuration = streamReader.ReadLine()?.Split().Skip(2).Select(int.Parse).ToArray() ?? Array.Empty<int>();
+        var (literalsCount, clausesCount) = (configuration[0], configuration[1]);
         var containsEmptyClause = false;
         var (pureLiterals, unitLiterals) = (new List<int>(), new List<int>());
         var clauses = new List<Clause>();
@@ -33,6 +34,7 @@ public static class FileStreamExtensions
             clauses: clauses,
             unitLiterals: unitLiterals,
             pureLiterals: pureLiterals,
-            containsEmptyClause: false);
+            containsEmptyClause: false,
+            literalsCount: literalsCount);
     }
 }
