@@ -8,18 +8,18 @@ Ensure you have [.NET 6.0 SDK](https://dotnet.microsoft.com/en-us/download/dotne
 ### Build
 ````console 
 git clone https://github.com/oveeernight/spbu-cdpa-course
-cd spbu-cdpa-course/Homework3/DPLL/DPLL
-dotnet publish "DPLL.csproj" -c Release -o /path/to/build/app
+cd spbu-cdpa-course/Homework3/DPLL/DpllSatSolver
+dotnet publish "DpllSatSolver.csproj" -c Release -o /path/to/build/app
 cd /path/to/build/app
 ````
 ### Run
 Windows 
 ````console
-DPLL.exe /path/to/file
-- ````
+DpllSatSolver.exe /path/to/file
+console````
 Linux
 ````console 
-./DPLL /path/to/file
+./DpllSatSolver /path/to/file
 ````
 
 Example output: 
