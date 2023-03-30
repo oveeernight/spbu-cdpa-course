@@ -28,6 +28,12 @@ public class SatFormula
         LiteralsCount = literalsCount;
     }
 
+    /// <summary>
+    /// Gets simplified formula assigning specified literal boolean value.
+    /// </summary>
+    /// <param name="literal">Literal to assign.</param>
+    /// <param name="assignedValue">Value of assigned literal.</param>
+    /// <returns>Simplified <see cref="SatFormula"/>.</returns>
     [Pure]
     public SatFormula SimplifyFormulaAssigningLiteral(int literal, bool assignedValue)
     {

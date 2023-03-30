@@ -10,8 +10,12 @@ public static class ClauseListExtensions
         {
             return new List<int>();
         }
-        return clauses[0].Literals
-            .Where(literal => clauses.TrueForAll(clause => clause.Literals.Contains(literal)))
-            .ToList();
+
+        var literals = clauses
+            .SelectMany(clause => clause.Literals)
+            .Distinct()
+            .ToHashSet();
+        var pureLiterals = literals.Where(literal => !literals.Contains(-literal)).ToList();
+        return pureLiterals;
     }
 }
