@@ -5,16 +5,16 @@ namespace Dpll.Solver;
 
 public class DpllSatSolver : ISatSolver
 {
-    public (SatResult result, Clause? satSuit) Solve(string path)
+    public (SatResult result, List<int>? satSuit) Solve(string path)
     {
         var file = File.Open(path, FileMode.Open);
         var streamReader = new StreamReader(file);
         var satFormula = streamReader.ToSatFormula();
-        var emptyClause = new Clause(new List<int>());
-        return Solve(satFormula, emptyClause);
+        var result = new List<int>();
+        return Solve(satFormula, result);
     }
 
-    public (SatResult result, Clause? satSuit) Solve(SatFormula satFormula, Clause result)
+    private (SatResult result, List<int>? satSuit) Solve(SatFormula satFormula, List<int> accumulator)
     {
         if (satFormula.ContainsEmptyClause)
         {
@@ -23,37 +23,27 @@ public class DpllSatSolver : ISatSolver
 
         if (satFormula.Clauses.Count == 0)
         {
-            return (SatResult.Sat, result);
+            return (SatResult.Sat, accumulator);
         }
 
-        while (satFormula.ContainsUnitLiteral)
+        if (satFormula.PureLiterals.Count + satFormula.UnitLiterals.Count > 0)
         {
-            var unitLiteral = satFormula.UnitLiterals.First();
-            var simplifiedFormula = satFormula.SimplifyFormulaAssigningLiteral(
-                unitLiteral,
-                unitLiteral > 0);
-            return Solve(simplifiedFormula, new Clause(result.Literals.Append(unitLiteral).ToList()));
+            var univocalLiterals = satFormula.PureLiterals.Union(satFormula.UnitLiterals).ToHashSet();
+            var (simplifiedFormula, updatedAccumulator) =
+                satFormula.SimplifyAssigningUnivocalLiterals(univocalLiterals, accumulator);
+            return Solve(simplifiedFormula, updatedAccumulator);
         }
 
-        while (satFormula.ContainsPureLiteral)
-        {
-            var pureLiteral = satFormula.PureLiterals.First();
-            var simplifiedFormula = satFormula.SimplifyFormulaAssigningLiteral(
-                pureLiteral,
-                pureLiteral > 0);
-            return Solve(simplifiedFormula, new Clause(result.Literals.Append(pureLiteral).ToList()));
-        }
-
-        var firstLiteralAbs = Math.Abs(satFormula.Clauses[0].Literals[0]);
-        var formulaWithFalseLiteral = satFormula.SimplifyFormulaAssigningLiteral(firstLiteralAbs, false);
-        var (falseResult, falseSatSuit) = Solve(formulaWithFalseLiteral, new Clause(result.Literals.Append(-firstLiteralAbs).ToList()));
+        var firstLiteral = satFormula.Clauses[0].Literals[0];
+        var (formulaWithFalseLiteral, updatedWithFalseAccumulator) = satFormula.SimplifyAssigningLiteral(firstLiteral, false, accumulator);
+        var (falseResult, falseSatSuit) = Solve(formulaWithFalseLiteral, updatedWithFalseAccumulator);
         if (falseResult == SatResult.Sat)
         {
             return (falseResult, falseSatSuit);
         }
 
-        var formulaWithTrueLiteral = satFormula.SimplifyFormulaAssigningLiteral(firstLiteralAbs, true);
-        var (trueResult, trueTestSuit) = Solve(formulaWithTrueLiteral, new Clause(result.Literals.Append(firstLiteralAbs).ToList()));
+        var (formulaWithTrueLiteral, updatedWithTrueAccumulator) = satFormula.SimplifyAssigningLiteral(firstLiteral, true, accumulator);
+        var (trueResult, trueTestSuit) = Solve(formulaWithTrueLiteral, updatedWithTrueAccumulator);
         return trueResult == SatResult.Sat ? (trueResult, trueTestSuit) : (SatResult.Unsat, null);
     }
 }

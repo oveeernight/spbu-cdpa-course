@@ -28,6 +28,11 @@ public class SatFormula
         LiteralsCount = literalsCount;
     }
 
+    public SatFormula(bool containsEmptyClause)
+    {
+        ContainsEmptyClause = containsEmptyClause;
+    }
+
     /// <summary>
     /// Gets simplified formula assigning specified literal boolean value.
     /// </summary>
@@ -35,42 +40,75 @@ public class SatFormula
     /// <param name="assignedValue">Value of assigned literal.</param>
     /// <returns>Simplified <see cref="SatFormula"/>.</returns>
     [Pure]
-    public SatFormula SimplifyFormulaAssigningLiteral(int literal, bool assignedValue)
+    public (SatFormula formula, List<int> accumulator) SimplifyAssigningLiteral(int literal, bool assignedValue, List<int> accumulator)
     {
         var literalAbs = Math.Abs(literal);
         var multiplier = assignedValue ? 1 : -1;
-        var simplifiedClauses = Clauses
-            .Where(clause => !clause.Literals.Contains(multiplier * literalAbs))
-            .Select(clause =>
-            {
-                var listCopy = new int[clause.Literals.Count];
-                clause.Literals.CopyTo(listCopy);
-                return new Clause(listCopy.ToList());
-            })
-            .ToList();
+        var univocalLiterals = new HashSet<int> { multiplier * literalAbs };
+        return SimplifyAssigningUnivocalLiterals(univocalLiterals, accumulator);
+    }
 
-        var containsEmptyClause = false;
+    public (SatFormula formula, List<int> accumulator) SimplifyAssigningUnivocalLiterals(
+        HashSet<int> literals,
+        List<int> accumulator,
+        bool copyClausesByValue = true)
+    {
+        if (literals.Any(literal => literals.Contains(-literal)))
+        {
+            // unsat case
+            return (new SatFormula(true), accumulator);
+        }
+        List<int> updatedAccumulator;
+        if (copyClausesByValue)
+        {
+            updatedAccumulator = accumulator.Union(literals).ToList();
+        }
+        else
+        {
+            updatedAccumulator = accumulator;
+            accumulator.AddRange(literals);
+        }
+        var enumerableClauses = Clauses
+            .Where(clause => !clause.Literals.Any(literals.Contains));
+        var simplifiedClauses =
+            copyClausesByValue ? enumerableClauses.CopyByValue().ToList() : enumerableClauses.ToList();
         var unitLiterals = new List<int>();
+        var containsEmptyClose = false;
         foreach (var clause in simplifiedClauses)
         {
-            clause.Literals.Remove(-multiplier * literalAbs);
-            if (clause.Literals.Count == 0)
-            {
-                containsEmptyClause = true;
-            }
-            else if (clause.Literals.Count == 1)
+            clause.Literals.RemoveAll(literal => literals.Contains(-literal));
+            if (clause.Literals.Count == 1)
             {
                 unitLiterals.Add(clause.Literals[0]);
             }
+
+            if (clause.Literals.Count == 0)
+            {
+                containsEmptyClose = true;
+            }
         }
-
         var pureLiterals = simplifiedClauses.GetPureLiterals();
-
-        return new SatFormula(
+        var simplifiedFormula = new SatFormula(
             clauses: simplifiedClauses,
             unitLiterals: unitLiterals,
             pureLiterals: pureLiterals,
-            containsEmptyClause: containsEmptyClause,
-            literalsCount: LiteralsCount - 1);
+            containsEmptyClause: containsEmptyClose,
+            literalsCount: LiteralsCount - literals.Count);
+        if (unitLiterals.Count + pureLiterals.Count == 0 || simplifiedClauses.Count == 0 || containsEmptyClose)
+        {
+            return (simplifiedFormula, updatedAccumulator);
+        }
+
+        // can simplify once again
+        var univocalLiterals = unitLiterals.Union(pureLiterals).ToHashSet();
+        if (univocalLiterals.Any(literal => univocalLiterals.Contains(-literal)))
+        {
+            return (new SatFormula(true), accumulator);
+        }
+
+        return simplifiedFormula.SimplifyAssigningUnivocalLiterals(
+           univocalLiterals,
+           updatedAccumulator,
+           false);
     }
 }

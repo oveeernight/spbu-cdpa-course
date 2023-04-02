@@ -4,5 +4,5 @@ namespace Dpll.Solver;
 
 public interface ISatSolver
 {
-    (SatResult result, Clause? satSuit) Solve(string path);
+    (SatResult result, List<int> satSuit) Solve(string path);
 }

@@ -7,8 +7,7 @@ namespace DpllTest;
 public class Tests
 {
     private ISatSolver solver = new DpllSatSolver();
-
-    private Action OnKek;
+    
     [SetUp]
     public void Setup()
     {
@@ -26,7 +25,7 @@ public class Tests
     public void Test_UnsatCase_ReturnsUnsat(string filePath)
     {
         var (result, _) = solver.Solve(filePath);
-        Assert.AreEqual(result, SatResult.Unsat);
+        Assert.AreEqual(SatResult.Unsat, result);
     }
 
     private static IEnumerable<string> satCases = new[]
