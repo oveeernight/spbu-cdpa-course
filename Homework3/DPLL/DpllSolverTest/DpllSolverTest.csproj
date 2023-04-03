@@ -35,7 +35,7 @@
       <None Update="TestFiles\unsat_100_160.txt">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
-      <None Update="TestFiles\unsat_3_2.txt">
+      <None Update="TestFiles\unsat_2_3.txt">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
       <None Update="TestFiles\unsat_1_2.txt">

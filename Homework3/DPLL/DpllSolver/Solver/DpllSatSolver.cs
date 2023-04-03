@@ -26,12 +26,10 @@ public class DpllSatSolver : ISatSolver
             return (SatResult.Sat, accumulator);
         }
 
-        if (satFormula.PureLiterals.Count + satFormula.UnitLiterals.Count > 0)
+        if (satFormula.ContainsPureLiteral || satFormula.ContainsUnitLiteral)
         {
-            var univocalLiterals = satFormula.PureLiterals.Union(satFormula.UnitLiterals).ToHashSet();
-            var (simplifiedFormula, updatedAccumulator) =
-                satFormula.SimplifyAssigningUnivocalLiterals(univocalLiterals, accumulator);
-            return Solve(simplifiedFormula, updatedAccumulator);
+            satFormula.SimplifyAssigningUnivocalLiterals(accumulator);
+            return Solve(satFormula, accumulator);
         }
 
         var firstLiteral = satFormula.Clauses[0].Literals[0];
@@ -42,7 +40,11 @@ public class DpllSatSolver : ISatSolver
             return (falseResult, falseSatSuit);
         }
 
-        var (formulaWithTrueLiteral, updatedWithTrueAccumulator) = satFormula.SimplifyAssigningLiteral(firstLiteral, true, accumulator);
+        var (formulaWithTrueLiteral, updatedWithTrueAccumulator) = satFormula.SimplifyAssigningLiteral(
+            firstLiteral,
+            assignedValue: true,
+            accumulator,
+            copyByValue: false);
         var (trueResult, trueTestSuit) = Solve(formulaWithTrueLiteral, updatedWithTrueAccumulator);
         return trueResult == SatResult.Sat ? (trueResult, trueTestSuit) : (SatResult.Unsat, null);
     }

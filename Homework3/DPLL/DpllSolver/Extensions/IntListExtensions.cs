@@ -25,4 +25,11 @@ public static class IntListExtensions
 
         return satFormula.Clauses.All(clause => clause.Literals.Any(literal => hashsetLiterals.Contains(literal)));
     }
+    
+    public static List<int> CopyByValue(this List<int> list)
+    {
+        var copy = new int[list.Count];
+        list.CopyTo(copy);
+        return copy.ToList();
+    }
 }

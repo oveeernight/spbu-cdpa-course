@@ -17,6 +17,7 @@ Windows
 ````console
 DpllSatSolver.exe /path/to/file
 console````
+````
 Linux
 ````console 
 ./DpllSatSolver /path/to/file
