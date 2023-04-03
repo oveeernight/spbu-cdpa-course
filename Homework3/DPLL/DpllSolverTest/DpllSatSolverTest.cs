@@ -16,7 +16,7 @@ public class Tests
     
     private static IEnumerable<string> unsatCases = new[]
     {
-        "TestFiles/unsat_1_2.txt", "TestFiles/unsat_3_2.txt", "TestFiles/unsat_50_100.txt",
+        "TestFiles/unsat_1_2.txt", "TestFiles/unsat_2_3.txt", "TestFiles/unsat_50_100.txt",
         "TestFiles/unsat_100_160.txt", "TestFiles/unsat_100_200.txt"
     };
 
