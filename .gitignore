@@ -3,6 +3,12 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 **/.idea/**
+**/main.log
+**/main.synctex.gz
+**/main.fls
+**/main.aux
+**/main.fdb_latexmk
+
 
 # User-specific files
 *.rsuser
