@@ -17,7 +17,7 @@ public class Tests
     private static IEnumerable<string> unsatCases = new[]
     {
         "TestFiles/unsat_1_2.txt", "TestFiles/unsat_2_3.txt", "TestFiles/unsat_50_100.txt",
-        "TestFiles/unsat_100_160.txt", "TestFiles/unsat_100_200.txt"
+        "TestFiles/unsat_100_160.txt", "TestFiles/unsat_100_200.txt", "TestFiles/unsat_155_1135.txt",
     };
 
     [Test]
@@ -32,7 +32,7 @@ public class Tests
     {
         "TestFiles/sat_200_680.txt", "TestFiles/example.txt", "TestFiles/examplePureLiteral.txt", "TestFiles/exampleUnitLiteral.txt",
         "TestFiles/sat_20_91.txt", "TestFiles/sat_50_80.txt","TestFiles/sat_50_80_2.txt", "TestFiles/sat_50_170.txt",
-        "TestFiles/sat_200_1200.txt"
+        "TestFiles/sat_200_1200.txt", "TestFiles/sat_100_499.txt",  "TestFiles/sat_100_449.txt"
     };
     
     [Test]

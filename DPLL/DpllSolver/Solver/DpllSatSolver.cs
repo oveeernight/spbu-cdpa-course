@@ -7,7 +7,7 @@ public class DpllSatSolver : ISatSolver
 {
     public (SatResult result, List<int>? satSuit) Solve(string path)
     {
-        var file = File.Open(path, FileMode.Open);
+        using var file = File.Open(path, FileMode.Open);
         var streamReader = new StreamReader(file);
         var satFormula = streamReader.ToSatFormula();
         var result = new List<int>();
