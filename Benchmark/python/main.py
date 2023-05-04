@@ -11,14 +11,20 @@ with open("measurements.txt", "r") as file:
 
     (sta, pvalue_n) = stats.normaltest(values)
     (stb, pvalue_s) = stats.shapiro(values)
-    print("pvalue normaltest", pvalue_n)
-    print("pvalue shapiro", pvalue_s)
+    print("pvalue normaltest:", pvalue_n)
+    print("pvalue shapiro:", pvalue_s)
     
-    
-    print("mean", np.mean(values))
-    print("deviation", np.std(values, ddof=1))
+    mean = np.mean(values)
+    print("mean:", mean)
+    std = np.std(values, ddof=1)
+    print("deviation:", std)
 
-    print(stats.t.ppf(0.975, df=len(values)-1)*stats.sem(values))
+    msd = std/np.sqrt(39)
+    print("msd:", msd)
+
+    print("доверительный:", mean, "+-", 2 * msd)
+    print("предсказывающий:", mean, "+-", 2 * std)
+
 
 
 
