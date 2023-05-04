@@ -1,22 +1,19 @@
 using System.Diagnostics;
+using Dpll.SatModels;
 using Dpll.Solver;
 
-ISatSolver solver = new DpllSatSolver();
 var path = args[0];
+ISatSolver solver = new DpllSatSolver();
 var timer = new Stopwatch();
-var measurements = new List<double>(40);
-var pathToMeasurements = "/home/reflection/study/dotnet/spbu-cdpa-course/Benchmark/python/measurements.txt";
-using var sw = new StreamWriter(pathToMeasurements, false);
-for (int j = 0; j < 80; j++)
+timer.Start();
+var (result, suit) = solver.Solve(path);
+var elapsed = timer.Elapsed;
+if (result == SatResult.Sat && result != null)
 {
-    timer.Start();
-    var (result, suit) = solver.Solve(path);
-    var elapsed = timer.Elapsed;
-    Console.WriteLine($"{elapsed.Seconds:00}.{elapsed.Milliseconds:000}");
-    timer.Reset();
-    if (j > 39)
-    {
-        sw.WriteLine($"{elapsed.Seconds:00}.{elapsed.Milliseconds:000}");
-        measurements.Add(elapsed.Seconds + (elapsed.Milliseconds / 1000.0));
-    }
+    Console.WriteLine("SAT");
+    Console.WriteLine(string.Join(' ', suit));
+}
+else
+{
+    Console.WriteLine("UNSAT");
 }
