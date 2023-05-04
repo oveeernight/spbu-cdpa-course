@@ -19,7 +19,7 @@ with open("measurements.txt", "r") as file:
     std = np.std(values, ddof=1)
     print("deviation:", std)
 
-    msd = std/np.sqrt(39)
+    msd = std/np.sqrt(40)
     print("msd:", msd)
 
     print("доверительный:", mean, "+-", 2 * msd)
