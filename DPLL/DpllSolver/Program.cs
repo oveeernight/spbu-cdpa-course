@@ -17,8 +17,3 @@ else
 {
     Console.WriteLine("UNSAT");
 }
-
-Console.WriteLine($"{elapsed.TotalSeconds:00}ss::{elapsed.Milliseconds:00}ms");
-
-
-
